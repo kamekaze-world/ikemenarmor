@@ -9,6 +9,8 @@
 
 ###### FOR IKEMEN GO .99 OR LATER ONLY. 5/30/24 NIGHTLY OR LATER
 
+**To download, go to the code button and download the zip.**
+
 ## Instructions
 This plug and play armor works by the player 
 turning the map "ikarmor_assertarmor" on, once it is on
