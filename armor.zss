@@ -1,0 +1,188 @@
+#IKEMEN GO Universal Armor 1.1 By Kamekaze 
+# mail - ilive@kamekaze.world
+# Twitter - @OldEra_Kamekaze
+#bsky - kamekaze.world
+#fgc network - Kamekaze@fgc.network
+#FOR IKEMEN GO .99 OR LATER ONLY. 5/30/24 NIGHTLY OR LATER
+
+#This plug and play armor works by the player 
+#turning the map "ikarmor_assertarmor" on, once it is on
+#it will activate and handle all attacks
+#it is important to note that all attacks with any invul can be hit
+#while it is active due to how the code works. the user MUST turn
+#the armor flag on and off on their own!
+#If you want your character to never have armor you can
+#add a const to them called "ikarmor_no_armor" It will negate any 
+#armor activation as the helper will not be called for them.
+
+#Player Values:
+#ikarmor_throw_protect - set this map to one to disable the ability to be thrown 
+#		     this works for characters with "hyper armor"
+#ikarmor_assertarmor - set to 1 to toggle armor. Hyper armor by default
+#		   The player must handle their own management to make it act as super armor
+#		   The recommended code for that can be found commented here below		     
+
+#assume this is in the [statedef +1]
+#map(ikarmor_assertarmor):=!map(armormod);
+
+#if numhelper(map(armor_helper_st))  && helper(map(armor_helper_st)),map(hittime)=0 &&  !map(armormod)
+#{
+#map(armormod):=1;
+#}
+
+#if map(armormod) && movetype!=H && helper(map(armor_helper_st)),map(hittime)=0
+#{
+#map(armormod):=map(armormod)+1;
+
+#if map(armormod)>=25 # Can be any number, doesnt matter
+#{
+#map(armormod):=0;
+#}
+#}
+
+
+#DO NOT EDIT A SINGLE THING UNDER THIS STATEMENT EVER!
+[Statedef 4123119; physics:n;type:s;anim:-2;movetype:a;]
+
+if time=0
+{
+map(hittime):=-1;
+}
+
+ignorehitpause{
+attackdist{value:0}
+if root,facing!=facing
+{
+turn{}
+}
+if root,statetype=A
+{
+statetypeset{statetype:A}
+}
+else if root,statetype=C
+{
+statetypeset{statetype:C}
+}
+else
+{
+statetypeset{statetype:S}
+}
+
+assertspecial{flag:invisible}
+hitoverride{
+time:-1
+;attr:SCA,AA,AP,AT
+;stateno:4123119
+}
+if root,movetype!=H{
+hitby{value:SCA,AA,AP}
+}
+else if root,movetype=H || !root,map(ikarmor_assertarmor)
+{
+nothitby{value:SCA}
+}
+
+changeanim{value:root,anim;elem:root,animelemno(0)}
+if !map(hitshaketime)
+{
+bindtoroot{pos:0 ,0}#For nightly as of 5/30/24 or later change to 0,0 otherwise
+}
+
+if map(hitshaketime)
+{
+map(hitshaketime):=map(hitshaketime)-1;
+
+if map(hitshaketime)%2{
+offset{x:-1;redirectid:root,id}
+}
+else
+{
+offset{x:1;redirectid:root,id}
+}
+assertspecial{flag:animfreeze}
+
+if !map(hitshaketime)
+{
+map(receivedhit):=0;
+}
+
+}
+else if map(slidetime)
+{
+
+if map(xvel)&&statetype!=A{
+veladd{x:map(xvel)*facing;redirectid:root,id}
+map(xvel):=0;
+}
+
+map(slidetime):=max(0,map(slidetime)-2);
+
+}
+
+if map(hittime)>-1 && !map(hitshaketime)
+{
+map(hittime):=map(hittime)-1;
+}
+
+if root,map(ikarmor_assertarmor) {
+if gethitvar(hitshaketime) && !map(hitshaketime){
+map(receivedhit):=1;
+map(idtarget):=gethitvar(id);
+lifeadd{value:-gethitvar(damage);redirectid:root,id}
+let pausetime = gethitvar(hitshaketime);
+map(hitshaketime):=$pausetime;
+map(hittime):=floor(gethitvar(hittime)*.55);
+map(slidetime):=gethitvar(slidetime);
+map(xvel):=gethitvar(xvel);
+
+}
+}
+}
+
+if map(hittime)>0 && (!playeridexist(map(idtarget))||!playerid(map(idtarget)),movecontact&&!playerid(map(hittime)),ishelper)
+{
+map(hittime):=0;
+}
+
+displaytoclipboard{text:"%d %d %d";params:map(rot),map(rw),map(oto)}
+
+
+[Statedef +1]
+map(armor_helper_st):=4123119;
+
+
+if const(ikarmor_no_armor)=0 && !ishelper
+{
+if !numhelper(map(armor_helper_st))
+{
+Helper{
+		id: map(armor_helper_st);
+		stateno: map(armor_helper_st);
+		ownpal: 1;
+		name:"Ik Armor Hp";
+		size.height: 0;
+		keyctrl:0;
+		pausemovetime:99999;
+		supermovetime:99999;
+	}
+}
+
+ignorehitpause if map(ikarmor_assertarmor)||(numhelper(map(armor_helper_st))&&helper(map(armor_helper_st)),map(receivedhit)) {
+
+if !map(ikarmor_throw_protect){
+hitby{value:SCA,AT}
+}
+else
+{
+nothitby{value:SCA}
+}
+
+}
+
+}
+
+ignorehitpause if p2,numhelper(map(armor_helper_st)) && p2,helper(map(armor_helper_st)),map(hitshaketime) && !p2,pausetime && !ishelper
+{
+pause{time:p2,helper(map(armor_helper_st)),map(hitshaketime)-1;movetime:p2,helper(map(armor_helper_st)),map(hitshaketime)-1}
+}
+
