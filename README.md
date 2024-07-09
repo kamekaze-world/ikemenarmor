@@ -12,6 +12,8 @@
 **To download, go to the code button and download the zip.**
 
 ## Instructions
+Add the roundtransition.zss file to your save/config.json under **CommonFiles**
+
 This plug and play armor works by the player 
 turning the map "ikarmor_assertarmor" on, once it is on
 it will activate and handle all attacks
