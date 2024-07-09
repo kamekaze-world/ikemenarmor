@@ -31,6 +31,8 @@ this works for characters with "hyper armor"
 The player must handle their own management to make it act as super armor
 The recommended code for that can be found commented here below		     
 
+
+## Super Armor example
 ##### Assume this is in the [statedef +1]
 
 ```
