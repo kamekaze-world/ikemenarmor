@@ -20,6 +20,7 @@ armor activation as the helper will not be called for them.
 ### Player Values:
 **ikarmor_throw_protect** - set this map to one to disable the ability to be thrown 
 this works for characters with "hyper armor"
+
 **ikarmor_assertarmor** - set to 1 to toggle armor. Hyper armor by default
 The player must handle their own management to make it act as super armor
 The recommended code for that can be found commented here below		     
