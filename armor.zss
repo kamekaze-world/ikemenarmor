@@ -1,4 +1,4 @@
-#IKEMEN GO Universal Armor 1.1 By Kamekaze 
+#IKEMEN GO Universal Armor 1.15 By Kamekaze 
 # mail - ilive@kamekaze.world
 # Twitter - @OldEra_Kamekaze
 #bsky - kamekaze.world
@@ -77,7 +77,7 @@ time:-1
 if root,movetype!=H{
 hitby{value:SCA,AA,AP}
 }
-else if root,movetype=H || !root,map(ikarmor_assertarmor)
+if root,movetype=H || !root,map(ikarmor_assertarmor)
 {
 nothitby{value:SCA}
 }
@@ -185,4 +185,5 @@ ignorehitpause if p2,numhelper(map(armor_helper_st)) && p2,helper(map(armor_help
 {
 pause{time:p2,helper(map(armor_helper_st)),map(hitshaketime)-1;movetime:p2,helper(map(armor_helper_st)),map(hitshaketime)-1}
 }
+
 
