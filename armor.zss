@@ -74,7 +74,7 @@ time:-1
 ;attr:SCA,AA,AP,AT
 ;stateno:4123119
 }
-if root,movetype!=H{
+if root,movetype!=H && root,map(ikarmor_assertarmor){
 hitby{value:SCA,AA,AP}
 }
 if root,movetype=H || !root,map(ikarmor_assertarmor)
@@ -185,5 +185,6 @@ ignorehitpause if p2,numhelper(map(armor_helper_st)) && p2,helper(map(armor_help
 {
 pause{time:p2,helper(map(armor_helper_st)),map(hitshaketime)-1;movetime:p2,helper(map(armor_helper_st)),map(hitshaketime)-1}
 }
+
 
 
