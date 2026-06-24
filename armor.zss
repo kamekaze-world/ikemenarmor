@@ -1,4 +1,4 @@
-#IKEMEN GO Universal Armor 1.15 By Kamekaze 
+#IKEMEN GO Universal Armor 1.16 By Kamekaze 
 # mail - ilive@kamekaze.world
 # Twitter - @OldEra_Kamekaze
 #bsky - kamekaze.world
@@ -20,7 +20,9 @@
 #		     this works for characters with "hyper armor"
 #ikarmor_assertarmor - set to 1 to toggle armor. Hyper armor by default
 #		   The player must handle their own management to make it act as super armor
-#		   The recommended code for that can be found commented here below		     
+#		   The recommended code for that can be found commented here below		
+# map(hitframe) - This map is set so that you can detect if an armored hit happened. EG if the armor
+	        is temporary and relies on some value decreasing. You can check that map(hitframe)=1.  
 
 #assume this is in the [statedef +1]
 #map(ikarmor_assertarmor):=!map(armormod);
@@ -69,10 +71,12 @@ statetypeset{statetype:S}
 }
 
 assertspecial{flag:invisible}
+ignorehitpause{
 hitoverride{
 time:-1
 ;attr:SCA,AA,AP,AT
 ;stateno:4123119
+}
 }
 if root,movetype!=H && root,map(ikarmor_assertarmor){
 hitby{value:SCA,AA,AP}
@@ -81,8 +85,12 @@ if root,movetype=H || !root,map(ikarmor_assertarmor)
 {
 nothitby{value:SCA}
 }
-
+if !root,incustomstate{
 changeanim{value:root,anim;elem:root,animelemno(0)}
+}
+else{
+changeanim{value:-2}
+}
 if !map(hitshaketime)
 {
 bindtoroot{pos:0 ,0}#For nightly as of 5/30/24 or later change to 0,0 otherwise
@@ -90,6 +98,7 @@ bindtoroot{pos:0 ,0}#For nightly as of 5/30/24 or later change to 0,0 otherwise
 
 if map(hitshaketime)
 {
+
 map(hitshaketime):=map(hitshaketime)-1;
 
 if map(hitshaketime)%2{
@@ -97,6 +106,7 @@ offset{x:-1;redirectid:root,id}
 }
 else
 {
+
 offset{x:1;redirectid:root,id}
 }
 assertspecial{flag:animfreeze}
@@ -110,8 +120,8 @@ map(receivedhit):=0;
 else if map(slidetime)
 {
 
-if map(xvel)&&statetype!=A{
-veladd{x:map(xvel)*facing;redirectid:root,id}
+if map(xvel)&&statetype!=A&&!root,enemynear,map(thrown){
+veladd{x:map(xvel)*facing;y:cond(!root,alive,map(yvel),0);redirectid:root,id}
 map(xvel):=0;
 }
 
@@ -121,10 +131,21 @@ map(slidetime):=max(0,map(slidetime)-2);
 
 if map(hittime)>-1 && !map(hitshaketime)
 {
+
 map(hittime):=map(hittime)-1;
 }
 
-if root,map(ikarmor_assertarmor) {
+ignorehitpause if map(hitframe){
+map(hitframe):=map(hitframe)-1;
+ignorehitpause if !map(hitframe){
+modifyplayer{movehit:1;redirectid:map(idtarget)}
+#prevent same hitdef from hitting us if it only triggered once.
+modifyhitdef{hitflag:P;redirectid:map(idtarget)}
+}
+}
+
+
+ignorehitpause if root,map(ikarmor_assertarmor) {
 if gethitvar(hitshaketime) && !map(hitshaketime){
 map(receivedhit):=1;
 map(idtarget):=gethitvar(id);
@@ -134,7 +155,8 @@ map(hitshaketime):=$pausetime;
 map(hittime):=floor(gethitvar(hittime)*.55);
 map(slidetime):=gethitvar(slidetime);
 map(xvel):=gethitvar(xvel);
-
+map(yvel):=gethitvar(yvel);
+map(hitframe):=2;
 }
 }
 }
@@ -144,7 +166,8 @@ if map(hittime)>0 && (!playeridexist(map(idtarget))||!playerid(map(idtarget)),mo
 map(hittime):=0;
 }
 
-displaytoclipboard{text:"%d %d %d";params:map(rot),map(rw),map(oto)}
+
+displaytoclipboard{text:"%d %d %d";params:map(hitframe),map(idtarget),map(oto)}
 
 
 [Statedef +1]
@@ -183,8 +206,16 @@ nothitby{value:SCA}
 
 ignorehitpause if p2,numhelper(map(armor_helper_st)) && p2,helper(map(armor_helper_st)),map(hitshaketime) && !p2,pausetime && !ishelper
 {
+
 pause{time:p2,helper(map(armor_helper_st)),map(hitshaketime)-1;movetime:p2,helper(map(armor_helper_st)),map(hitshaketime)-1}
 }
 
+if stateno!=4123119 && ishelper(map(armor_helper_st)){
+if incustomstate{
+changestate{value:4123119}
+}else{
+selfstate{value:4123119}
+}
 
+}
 
