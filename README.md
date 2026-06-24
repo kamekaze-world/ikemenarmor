@@ -26,7 +26,8 @@ The player must handle their own management to make it act as super armor
 The recommended code for that can be found commented here below		     
 
 **hitframe** - This map is set so that you can detect if an armored hit happened. EG if the armor
-              is temporary and relies on some value decreasing. You can check that map(hitframe)=1.  
+              is temporary and relies on some value decreasing. You can check that map(hitframe)=1
+              if it's in the +1 or negative states or check that map(hitframe)=2 if it's in the state itself.  
 
 
 ## Super Armor example
