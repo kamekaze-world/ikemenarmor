@@ -1,4 +1,4 @@
-# IKEMEN GO Universal Armor 1.1 By Kamekaze 
+# IKEMEN GO Universal Armor 1.16 By Kamekaze 
 
 ###### FOR IKEMEN GO .99 OR LATER ONLY. 5/30/24 NIGHTLY OR LATER
 
