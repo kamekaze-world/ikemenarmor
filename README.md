@@ -25,6 +25,9 @@ this works for characters with "hyper armor"
 The player must handle their own management to make it act as super armor
 The recommended code for that can be found commented here below		     
 
+**hitframe** - This map is set so that you can detect if an armored hit happened. EG if the armor
+              is temporary and relies on some value decreasing. You can check that map(hitframe)=1.  
+
 
 ## Super Armor example
 ##### Assume this is in the [statedef +1]
