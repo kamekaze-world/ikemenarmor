@@ -33,14 +33,14 @@ The recommended code for that can be found commented here below
 ##### Assume this is in the [statedef +1]
 
 ```
-map(ikarmor_assertarmor):=!map(armormod);
+map(ikarmor_assertarmor):=(!map(armormod));
 
-if numhelper(map(armor_helper_st))  && helper(map(armor_helper_st)),map(hittime)=0 &&  !map(armormod)
+if numhelper(map(armor_helper_st))  && helper(map(armor_helper_st)),map(hitframe)=1 &&  !map(armormod)
 {
 map(armormod):=1;
 }
 
-if map(armormod) && movetype!=H && helper(map(armor_helper_st)),map(hittime)=0
+if map(armormod) && movetype!=H && helper(map(armor_helper_st)),map(hitframe)=0
 {
 map(armormod):=map(armormod)+1;
 
@@ -49,4 +49,5 @@ if map(armormod)>=25 # Can be any number, doesnt matter
 map(armormod):=0;
 }
 }
+
 ```
