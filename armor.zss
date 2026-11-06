@@ -50,7 +50,7 @@ if root,movetype=H || !root,map(ikarmor_assertarmor)
 nothitby{value:SCA}
 }
 if !root,incustomstate{
-if anim!=-2{
+if parent,anim!=-2{
 changeanim{value:root,anim;elem:root,animelemno(0)}
 }
 }
