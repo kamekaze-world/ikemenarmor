@@ -1,4 +1,4 @@
-#IKEMEN GO Universal Armor 1.17 By Kamekaze 
+#IKEMEN GO Universal Armor 1.18 By Kamekaze 
 # mail - ilive@kamekaze.world
 # Twitter - @OldEra_Kamekaze
 #bsky - kamekaze.world
@@ -127,7 +127,7 @@ map(hitframe):=2;
 }
 }
 
-if map(hittime)>0 && (!playeridexist(map(idtarget))||!playerid(map(idtarget)),movecontact&&!playerid(map(hittime)),ishelper)
+if map(hittime)>0 && (!playeridexist(map(idtarget))||cond(playeridexist(map(idtarget)),!playerid(map(idtarget)),movecontact&&!playerid(map(idtarget)),ishelper,0))
 {
 map(hittime):=0;
 }
@@ -155,7 +155,7 @@ Helper{
 		supermovetime:99999;
 	}
 }
-
+if map(armor_helper_st) {
 ignorehitpause if map(ikarmor_assertarmor)||(numhelper(map(armor_helper_st))&&helper(map(armor_helper_st)),map(receivedhit)) {
 
 if !map(ikarmor_throw_protect){
@@ -168,6 +168,7 @@ nothitby{value:SCA}
 
 }
 
+}
 }
 
 ignorehitpause if p2,numhelper(map(armor_helper_st)) && p2,helper(map(armor_helper_st)),map(hitshaketime) && !p2,pausetime && !ishelper
@@ -184,4 +185,5 @@ selfstate{value:4123119}
 }
 
 }
+
 
